@@ -5,7 +5,7 @@ AI-powered technical debt auditor. Users submit legacy code; the system returns 
 
 ## Tech Stack
 - **Backend:** Python 3.12+, FastAPI, Uvicorn
-- **AI Engine:** Gemini 1.5 Flash via `langchain-google-genai`
+- **AI Engine:** Llama 3.3 70B via Groq API (`langchain-groq`)
 - **Static Analysis:** Radon (cyclomatic complexity)
 - **Database:** Supabase (PostgreSQL)
 - **Frontend:** Next.js 14, Tailwind CSS, Lucide React
@@ -25,7 +25,7 @@ backend/
 ├── schemas/
 │   └── analysis.py          # AnalysisRequest / AnalysisResponse Pydantic models
 ├── services/
-│   ├── gemini_service.py    # LangChain + Gemini orchestration
+│   ├── gemini_service.py    # LangChain + Groq orchestration
 │   └── supabase_service.py  # Supabase CRUD (Phase 2)
 ├── utils/
 │   └── static_analysis.py  # Radon wrapper → cyclomatic complexity metrics
@@ -46,7 +46,8 @@ supabase/                    # DB migrations (Phase 2)
 
 ## Environment Variables Required
 ```
-GEMINI_API_KEY=        # Google AI Studio key
+GROQ_API_KEY=          # Groq console key (console.groq.com)
+GROQ_MODEL=            # e.g. llama-3.3-70b-versatile
 SUPABASE_URL=          # Supabase project URL
 SUPABASE_KEY=          # Supabase anon/service key
 ```
@@ -76,6 +77,6 @@ uvicorn main:app --reload --port 8000
 ```
 
 ## Phases
-- **Phase 1 (current):** Backend structure + `/analyze` endpoint with Gemini + Radon.
+- **Phase 1 (done):** Backend structure + `/analyze` endpoint with Groq (Llama 3.3 70B) + Radon.
 - **Phase 2:** Supabase persistence + audit history endpoints.
 - **Phase 3:** Next.js frontend with Refactor Diff view.
