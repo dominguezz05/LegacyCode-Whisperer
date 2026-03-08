@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from schemas.analysis import AnalysisRequest, AnalysisResponse
 from services.gemini_service import GeminiService
+from services import supabase_service
 from utils.static_analysis import compute_complexity_report, mi_to_score
 
 logger = logging.getLogger(__name__)
@@ -74,10 +75,19 @@ async def analyze_code(
     llm_score: int = llm_result.get("maintainability_score", radon_score)
     blended_score = round(llm_score * 0.6 + radon_score * 0.4)
 
-    return AnalysisResponse(
+    result = AnalysisResponse(
         maintainability_score=blended_score,
         complexity_report=complexity_report,
         security_risks=llm_result.get("security_risks", []),
         refactoring_suggestions=llm_result.get("refactoring_suggestions", []),
         plain_english_summary=llm_result.get("plain_english_summary", ""),
     )
+
+    # Step 4: Persist to Supabase (graceful — does nothing if not configured)
+    await supabase_service.save_audit(
+        code=request.code,
+        language=request.language,
+        result=result,
+    )
+
+    return result
