@@ -1,0 +1,37 @@
+# --- Environment Variables (CRITICAL) ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+
+# --- Claude & Anthropic Specific ---
+.claude/
+claude_config.json
+anthropic.log
+.anthropic/
+claude_desktop_config.json
+claude-chat-*.json
+claude-chat-*.md
+
+# --- Python (Backend) ---
+__pycache__/
+*.py[cod]
+.venv
+venv/
+.pytest_cache/
+*.egg-info/
+
+# --- Node.js (Frontend) ---
+node_modules/
+.next/
+out/
+.vercel
+*.log
+
+# --- OS / IDE Specific ---
+.DS_Store
+.vscode/
+.idea/

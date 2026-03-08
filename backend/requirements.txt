@@ -1,0 +1,25 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Data Validation
+pydantic>=2.0
+pydantic-settings>=2.0
+
+# Environment
+python-dotenv
+
+# AI & LLM Orchestration
+langchain
+langchain-google-genai
+google-generativeai
+
+# Static Analysis
+radon
+
+# Database
+supabase
+
+# HTTP Client
+httpx
