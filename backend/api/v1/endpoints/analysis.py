@@ -8,6 +8,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
+from core.auth import OptionalUser
 from schemas.analysis import AnalysisRequest, AnalysisResponse
 from services.gemini_service import GeminiService
 from services import supabase_service
@@ -44,6 +45,7 @@ def _sse(event_type: str, **kwargs: object) -> str:
 async def analyze_code(
     request: AnalysisRequest,
     gemini_service: GeminiDep,
+    user_id: OptionalUser,
 ) -> AnalysisResponse:
     """Full audit — waits for the complete LLM response. Use /stream for real-time UI."""
     complexity_report = compute_complexity_report(request.code)
@@ -73,7 +75,9 @@ async def analyze_code(
         plain_english_summary=llm_result.get("plain_english_summary", ""),
     )
 
-    await supabase_service.save_audit(code=request.code, language=request.language, result=result)
+    await supabase_service.save_audit(
+        code=request.code, language=request.language, result=result, user_id=user_id
+    )
     return result
 
 
@@ -83,6 +87,7 @@ async def analyze_code(
 async def analyze_code_stream(
     request: AnalysisRequest,
     gemini_service: GeminiDep,
+    user_id: OptionalUser,
 ) -> StreamingResponse:
     """Stream the audit as Server-Sent Events.
 
@@ -131,7 +136,7 @@ async def analyze_code_stream(
         )
 
         await supabase_service.save_audit(
-            code=request.code, language=request.language, result=result
+            code=request.code, language=request.language, result=result, user_id=user_id
         )
         yield _sse("result", data=result.model_dump())
         yield _sse("done")

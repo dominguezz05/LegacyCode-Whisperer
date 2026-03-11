@@ -4,6 +4,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Query, status
 
+from core.auth import OptionalUser
 from schemas.analysis import AuditRecord
 from services import supabase_service
 
@@ -15,17 +16,19 @@ router = APIRouter(prefix="/history", tags=["History"])
 @router.get(
     "/",
     response_model=list[AuditRecord],
-    summary="List recent audit history",
+    summary="List the current user's audit history",
 )
 async def get_history(
+    user_id: OptionalUser,
     limit: int = Query(default=20, ge=1, le=100, description="Max records to return"),
 ) -> list[AuditRecord]:
-    """Return the most recent audits, newest first.
+    """Return the authenticated user's most recent audits, newest first.
 
-    If Supabase is not configured, returns an empty list instead of erroring —
-    this allows the app to run in Phase 1 mode without persistence.
+    Requires a valid Supabase JWT in the Authorization header.
+    Returns an empty list when unauthenticated (no 401 — keeps the frontend
+    graceful until the Auth frontend is implemented in Phase 5-B).
     """
-    return await supabase_service.get_audit_history(limit=limit)
+    return await supabase_service.get_audit_history(limit=limit, user_id=user_id)
 
 
 @router.get(

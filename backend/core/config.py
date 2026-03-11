@@ -12,9 +12,12 @@ class Settings(BaseSettings):
     groq_api_key: str
     groq_model: str = "llama-3.3-70b-versatile"
 
-    # Supabase (Phase 2 — optional for Phase 1)
+    # Supabase (Phase 2+)
     supabase_url: str = ""
     supabase_key: str = ""
+    # JWT Secret from Supabase Dashboard → Project Settings → API → JWT Secret
+    # Required for auth (Phase 5). Leave empty to run without authentication.
+    supabase_jwt_secret: str = ""
 
     # App
     app_title: str = "LegacyCode Whisperer API"
