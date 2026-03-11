@@ -15,40 +15,7 @@ interface AnalysisPanelProps {
   refactored: RefactorResponse | null
   originalCode: string
   monacoLang: string
-  isLoading: boolean
-  isRefactoring: boolean
   error: string | null
-}
-
-function Skeleton() {
-  return (
-    <div className="p-5 space-y-5 animate-pulse">
-      <div className="flex justify-center pt-4 pb-2">
-        <div className="w-36 h-36 rounded-full bg-zinc-800" />
-      </div>
-      <div className="grid grid-cols-2 gap-px bg-zinc-800">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-zinc-900 p-3 h-16" />
-        ))}
-      </div>
-      <div className="space-y-2">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-3 bg-zinc-800 rounded-none" style={{ width: `${70 + i * 8}%` }} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function RefactorSkeleton() {
-  return (
-    <div className="p-5 space-y-3 animate-pulse">
-      <div className="h-3 bg-zinc-800 rounded-none w-1/3" />
-      <div className="h-3 bg-zinc-800 rounded-none w-2/3" />
-      <div className="h-3 bg-zinc-800 rounded-none w-1/2" />
-      <div className="mt-6 h-64 bg-zinc-800 rounded-none" />
-    </div>
-  )
 }
 
 function EmptyState() {
@@ -74,13 +41,8 @@ export function AnalysisPanel({
   refactored,
   originalCode,
   monacoLang,
-  isLoading,
-  isRefactoring,
   error,
 }: AnalysisPanelProps) {
-  if (isLoading) return <Skeleton />
-  if (isRefactoring && !result && !refactored) return <RefactorSkeleton />
-
   if (error) {
     return (
       <div className="p-4">
@@ -188,15 +150,11 @@ export function AnalysisPanel({
 
           {refactored && (
             <TabsContent value="refactored" className="h-full">
-              {isRefactoring ? (
-                <RefactorSkeleton />
-              ) : (
-                <RefactoredTab
-                  refactored={refactored}
-                  originalCode={originalCode}
-                  monacoLang={monacoLang}
-                />
-              )}
+              <RefactoredTab
+                refactored={refactored}
+                originalCode={originalCode}
+                monacoLang={monacoLang}
+              />
             </TabsContent>
           )}
         </div>
