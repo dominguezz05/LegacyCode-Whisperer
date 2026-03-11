@@ -40,6 +40,24 @@ export interface RefactorResponse {
   explanation: string
 }
 
+// ── Streaming SSE events ──────────────────────────────────────────────────────
+
+export type StreamPhase =
+  | 'idle'
+  | 'static_analysis'
+  | 'ai_audit'
+  | 'refactoring'
+  | 'building'
+  | 'done'
+
+export type StreamEvent =
+  | { type: 'phase';  phase: StreamPhase; label: string }
+  | { type: 'token';  content: string }
+  | { type: 'result'; data: AnalysisResponse }
+  | { type: 'refactor_result'; data: RefactorResponse }
+  | { type: 'error';  message: string }
+  | { type: 'done' }
+
 export interface AuditRecord extends AnalysisResponse {
   id: string
   created_at: string
