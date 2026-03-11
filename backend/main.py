@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.v1.endpoints.analysis import router as analysis_router
+from api.v1.endpoints.history import router as history_router
 from core.config import get_settings
 
 # ── Logging ───────────────────────────────────────────────────────────────────
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
 
     # Routers — versioned API prefix following REST best practices
     app.include_router(analysis_router, prefix="/api/v1")
+    app.include_router(history_router, prefix="/api/v1")
 
     @app.get("/health", tags=["Health"])
     async def health_check() -> dict[str, str]:

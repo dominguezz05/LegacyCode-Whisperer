@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -63,3 +65,15 @@ class AnalysisResponse(BaseModel):
         ...,
         description="Human-readable explanation of the code's logic and debt.",
     )
+
+
+# ── Audit Record (Phase 2 — persisted) ───────────────────────────────────────
+
+
+class AuditRecord(AnalysisResponse):
+    """An AnalysisResponse enriched with persistence metadata."""
+
+    id: UUID
+    created_at: datetime
+    language: str
+    code_snippet: str
