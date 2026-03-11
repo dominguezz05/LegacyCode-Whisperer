@@ -67,6 +67,23 @@ class AnalysisResponse(BaseModel):
     )
 
 
+# ── Refactor ─────────────────────────────────────────────────────────────────
+
+
+class RefactorRequest(BaseModel):
+    """Payload the client sends to POST /api/v1/refactor."""
+
+    code: str = Field(..., min_length=10, description="The source code to refactor.")
+    language: str = Field(default="python", description="Programming language.")
+
+
+class RefactorResponse(BaseModel):
+    """Refactored source code plus a short explanation of changes."""
+
+    refactored_code: str = Field(..., description="The rewritten, clean version of the code.")
+    explanation: str = Field(..., description="Summary of the key changes made.")
+
+
 # ── Audit Record (Phase 2 — persisted) ───────────────────────────────────────
 
 
