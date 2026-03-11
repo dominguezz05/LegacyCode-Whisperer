@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from langchain_groq import ChatGroq
@@ -62,6 +63,34 @@ class GeminiService:
         raw_content: str = response.content  # type: ignore[assignment]
 
         return self._parse_refactor_response(raw_content)
+
+    # ── Streaming variants ────────────────────────────────────────────────────
+    # These yield raw LLM tokens one by one.  The caller is responsible for
+    # accumulating the full response and calling the appropriate parse method.
+
+    async def stream_audit_technical_debt(
+        self, code: str, language: str
+    ) -> AsyncGenerator[str, None]:
+        messages = [
+            SystemMessage(content=TECHNICAL_DEBT_AUDIT_SYSTEM_PROMPT),
+            HumanMessage(content=build_user_message(code, language)),
+        ]
+        logger.info("Streaming code audit request to Groq (language=%s)", language)
+        async for chunk in self._llm.astream(messages):
+            if chunk.content:
+                yield chunk.content  # type: ignore[misc]
+
+    async def stream_refactor_code(
+        self, code: str, language: str
+    ) -> AsyncGenerator[str, None]:
+        messages = [
+            SystemMessage(content=REFACTOR_SYSTEM_PROMPT),
+            HumanMessage(content=build_refactor_user_message(code, language)),
+        ]
+        logger.info("Streaming refactor request to Groq (language=%s)", language)
+        async for chunk in self._llm.astream(messages):
+            if chunk.content:
+                yield chunk.content  # type: ignore[misc]
 
     def _parse_refactor_response(self, raw: str) -> dict[str, Any]:
         """Parse the XML-delimited refactor response.
