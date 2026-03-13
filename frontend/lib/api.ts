@@ -1,13 +1,29 @@
 import { AnalysisResponse, AuditRecord, RefactorResponse, StreamEvent } from './types'
+import { createClient } from './supabase/client'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
+// ── Auth header helper ────────────────────────────────────────────────────────
+// Reads the current Supabase session and returns headers with Bearer token.
+// If the user is not logged in, returns headers without Authorization.
+
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const supabase = createClient()
+  const { data: { session } } = await supabase.auth.getSession()
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`
+  }
+  return headers
+}
+
 
 // ── Blocking endpoints (kept for Swagger / fallback) ─────────────────────────
 
 export async function analyzeCode(code: string, language: string): Promise<AnalysisResponse> {
   const response = await fetch(`${BASE_URL}/api/v1/analyze/`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: await getAuthHeaders(),
     body: JSON.stringify({ code, language }),
   })
   if (!response.ok) {
@@ -20,7 +36,7 @@ export async function analyzeCode(code: string, language: string): Promise<Analy
 export async function refactorCode(code: string, language: string): Promise<RefactorResponse> {
   const response = await fetch(`${BASE_URL}/api/v1/refactor/`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: await getAuthHeaders(),
     body: JSON.stringify({ code, language }),
   })
   if (!response.ok) {
@@ -68,7 +84,7 @@ export async function* streamAnalyzeCode(
 ): AsyncGenerator<StreamEvent> {
   const response = await fetch(`${BASE_URL}/api/v1/analyze/stream`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: await getAuthHeaders(),
     body: JSON.stringify({ code, language }),
   })
   if (!response.ok) {
@@ -84,7 +100,7 @@ export async function* streamRefactorCode(
 ): AsyncGenerator<StreamEvent> {
   const response = await fetch(`${BASE_URL}/api/v1/refactor/stream`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: await getAuthHeaders(),
     body: JSON.stringify({ code, language }),
   })
   if (!response.ok) {
@@ -97,13 +113,17 @@ export async function* streamRefactorCode(
 // ── History ───────────────────────────────────────────────────────────────────
 
 export async function getHistory(limit = 20): Promise<AuditRecord[]> {
-  const response = await fetch(`${BASE_URL}/api/v1/history/?limit=${limit}`)
+  const response = await fetch(`${BASE_URL}/api/v1/history/?limit=${limit}`, {
+    headers: await getAuthHeaders(),
+  })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   return response.json()
 }
 
 export async function getAuditById(id: string): Promise<AuditRecord> {
-  const response = await fetch(`${BASE_URL}/api/v1/history/${id}`)
+  const response = await fetch(`${BASE_URL}/api/v1/history/${id}`, {
+    headers: await getAuthHeaders(),
+  })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   return response.json()
 }

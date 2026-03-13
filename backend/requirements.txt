@@ -12,8 +12,10 @@ python-dotenv
 
 # AI & LLM Orchestration
 langchain
-langchain-google-genai
-google-generativeai
+langchain-groq
+
+# Auth — JWT verification (ES256 via JWKS + HS256 legacy fallback)
+PyJWT[crypto]>=2.8
 
 # Static Analysis
 radon

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
 import { Terminal } from 'lucide-react'
+import { HeaderUserMenu } from '@/components/HeaderUserMenu'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans bg-zinc-950 text-zinc-100 antialiased`}>
+      <body className={`${inter.variable} font-sans bg-zinc-950 text-zinc-100 antialiased`} suppressHydrationWarning>
         <header className="h-11 border-b border-zinc-800 flex items-center px-4 gap-6 bg-zinc-950 sticky top-0 z-50">
           <Link href="/" className="flex items-center gap-2">
             <Terminal className="w-4 h-4 text-amber-400" />
@@ -39,9 +40,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
           </nav>
 
-          <div className="ml-auto flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-mono text-zinc-600">:8000</span>
+          <div className="ml-auto flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-mono text-zinc-600">:8000</span>
+            </div>
+            <HeaderUserMenu />
           </div>
         </header>
 
