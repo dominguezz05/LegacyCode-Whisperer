@@ -92,8 +92,8 @@ export default function HomePage() {
           setStreamPhase(event.phase)
         } else if (event.type === 'token') {
           setStreamTokens((prev) => prev + event.content)
-        } else if (event.type === 'result') {
-          setRefactored(event.data as RefactorResponse)
+        } else if (event.type === 'refactor_result') {
+          setRefactored(event.data)
         } else if (event.type === 'error') {
           setError(event.message)
         }
