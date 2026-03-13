@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,6 +19,19 @@ class Settings(BaseSettings):
     # JWT Secret from Supabase Dashboard → Project Settings → API → JWT Secret
     # Required for auth (Phase 5). Leave empty to run without authentication.
     supabase_jwt_secret: str = ""
+
+    # CORS — comma-separated list of allowed origins.
+    # Dev default: localhost only. In production set via env var on Render:
+    #   CORS_ORIGINS=https://your-app.vercel.app,https://custom-domain.com
+    cors_origins: list[str] = ["http://localhost:3000"]
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def _parse_cors_origins(cls, v: str | list[str]) -> list[str]:
+        """Accept either a JSON array or a comma-separated string from env."""
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
     # App
     app_title: str = "LegacyCode Whisperer API"

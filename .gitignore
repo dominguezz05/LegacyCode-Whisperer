@@ -6,6 +6,9 @@
 .env.production.local
 *.env
 *.env.*
+# Exception: example/template files are safe to commit (no real secrets)
+!*.env.example
+!*.env.local.example
 
 # --- Claude & Anthropic Specific ---
 .claude/
