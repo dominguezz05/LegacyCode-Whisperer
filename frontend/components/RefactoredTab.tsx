@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Copy, Check } from 'lucide-react'
 import { RefactorResponse } from '@/lib/types'
 
 const DiffEditor = dynamic(
@@ -15,6 +17,15 @@ interface RefactoredTabProps {
 }
 
 export function RefactoredTab({ refactored, originalCode, monacoLang }: RefactoredTabProps) {
+  const [copied, setCopied] = useState(false)
+
+  function handleCopy() {
+    navigator.clipboard.writeText(refactored.refactored_code).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
   return (
     <div className="flex flex-col h-full">
       {/* Explanation banner */}
@@ -30,8 +41,18 @@ export function RefactoredTab({ refactored, originalCode, monacoLang }: Refactor
         <div className="px-4 py-1.5 border-r border-zinc-800">
           <span className="text-xs font-mono text-zinc-600 uppercase tracking-widest">Original</span>
         </div>
-        <div className="px-4 py-1.5">
+        <div className="px-4 py-1.5 flex items-center justify-between">
           <span className="text-xs font-mono text-emerald-600 uppercase tracking-widest">Refactored</span>
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-mono border border-zinc-700 hover:border-emerald-600 hover:text-emerald-400 text-zinc-500 transition-colors"
+            title="Copy refactored code"
+          >
+            {copied
+              ? <><Check className="w-3 h-3 text-emerald-400" /><span className="text-emerald-400">Copied</span></>
+              : <><Copy className="w-3 h-3" /><span>Copy</span></>
+            }
+          </button>
         </div>
       </div>
 

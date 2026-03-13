@@ -8,8 +8,35 @@ import { HeaderUserMenu } from '@/components/HeaderUserMenu'
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'LegacyCode Whisperer',
-  description: 'AI-powered technical debt auditor',
+  title: {
+    default: 'LegacyCode Whisperer',
+    template: '%s | LegacyCode Whisperer',
+  },
+  description:
+    'AI-powered technical debt auditor. Paste legacy code and get instant maintainability scores, security risks, and AI-generated refactoring suggestions.',
+  keywords: [
+    'technical debt',
+    'code review',
+    'AI code analysis',
+    'legacy code',
+    'refactoring',
+    'code quality',
+    'maintainability',
+    'security audit',
+  ],
+  authors: [{ name: 'LegacyCode Whisperer' }],
+  openGraph: {
+    title: 'LegacyCode Whisperer',
+    description: 'AI-powered technical debt auditor — instant maintainability scores & refactoring.',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'LegacyCode Whisperer',
+    description: 'AI-powered technical debt auditor — instant maintainability scores & refactoring.',
+  },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
