@@ -1,43 +1,41 @@
-# 📜 LegacyCode Whisperer: AI-Powered Technical Debt Auditor
+# LegacyCode Whisperer
 
-**LegacyCode Whisperer** is an AI-native agent designed to transform old, obscure, and undocumented code into modern, secure, and maintainable software. It leverages **Llama 3.3 70B (Groq)** for deep logical reasoning and **Supabase** for persistent audit history.
+AI-powered technical debt auditor. Paste legacy code, get instant maintainability scores, security risks, and AI-generated refactoring suggestions — with real-time streaming.
 
----
-
-## 🚀 Key Features
-
-- **Deep Logic Audit:** Uses Llama 3.3 70B via Groq to deconstruct complex, undocumented legacy logic.
-- **Maintainability Scoring:** Combines LLM reasoning with static analysis (`Radon`) to provide a 0-100 health score.
-- **Automated Refactor Roadmap:** Generates structured JSON plans to modernize syntax and fix security vulnerabilities.
-- **Cloud Persistence:** Securely stores audit history and analysis reports using **Supabase (PostgreSQL)**.
-- **Interactive Code Diff:** Side-by-side comparison of original code vs. AI-optimized versions.
+**Live:** https://legacy-code-whisperer.vercel.app
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Frontend:** Next.js 14, Tailwind CSS, Lucide React.
-- **Backend:** FastAPI (Python 3.12).
-- **AI Engine:** Llama 3.3 70B via Groq API (LangChain orchestration).
-- **Database & Auth:** Supabase (PostgreSQL).
-- **Static Analysis:** Radon (Cyclomatic Complexity metrics).
+![LegacyCode Whisperer screenshot](docs/screenshot.png)
 
 ---
 
-## 📂 Project Structure
+## Features
 
-```bash
-├── backend/              # FastAPI API & AI Logic
-│   ├── services/         # Groq LLM & Supabase integrations
-│   ├── utils/            # Static analysis tools (Radon)
-│   └── main.py           # API Endpoints
-├── frontend/             # Next.js User Interface
-└── supabase/             # Database migrations and schema
-
-```
+- **Maintainability score** — blends LLM reasoning (60%) with Radon static analysis (40%) into a 0–100 health score
+- **Security audit** — identifies risks with severity levels (critical / high / medium / low)
+- **Refactoring suggestions** — structured action plan with before/after code snippets
+- **AI refactor** — full rewrite of the submitted code with a side-by-side diff view
+- **Real-time streaming** — results stream token by token via SSE (no blank waiting screen)
+- **17 languages** — Python, JavaScript, TypeScript, Java, Go, Rust, C, C++, C#, PHP, Ruby, Swift, Kotlin, Scala, R, SQL, Bash
+- **Audit history** — per-user history stored in Supabase, protected by JWT auth
+- **Auth** — Supabase email/password login, protected routes, session management
 
 ---
 
-## ⚖️ License
+## Tech Stack
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 14, Tailwind CSS, Lucide React, Monaco Editor, Framer Motion |
+| Backend | FastAPI, Python 3.12, Uvicorn |
+| AI | Llama 3.3 70B via Groq API (LangChain) |
+| Static analysis | Radon (cyclomatic complexity + maintainability index) |
+| Database & Auth | Supabase (PostgreSQL + Auth) |
+| Deploy | Vercel (frontend) + Render (backend) |
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
