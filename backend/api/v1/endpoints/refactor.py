@@ -92,7 +92,7 @@ async def refactor_code_stream(
             yield _sse("error", message=str(exc))
             return
 
-        yield _sse("result", data={
+        yield _sse("refactor_result", data={
             "refactored_code": llm_result.get("refactored_code", ""),
             "explanation": llm_result.get("explanation", ""),
         })
