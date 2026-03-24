@@ -10,6 +10,20 @@ AI-powered technical debt auditor. Paste legacy code, get instant maintainabilit
 
 ---
 
+## CLI (npm)
+
+Prefer the terminal? Install the CLI directly from npm:
+
+```bash
+npm install -g legacywhisperer
+lw analyze app.py
+lw refactor app.py -o clean.py
+```
+
+→ [legacywhisperer on npm](https://www.npmjs.com/package/legacywhisperer) · [CLI docs](legacywhisperer-cli/README.md)
+
+---
+
 ## Features
 
 - **Maintainability score** — blends LLM reasoning (60%) with Radon static analysis (40%) into a 0–100 health score
