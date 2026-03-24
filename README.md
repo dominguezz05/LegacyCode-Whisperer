@@ -1,5 +1,10 @@
 # LegacyCode Whisperer
 
+[![Live](https://img.shields.io/badge/live-vercel-black)](https://legacy-code-whisperer.vercel.app)
+[![npm](https://img.shields.io/npm/v/legacywhisperer)](https://www.npmjs.com/package/legacywhisperer)
+[![npm downloads](https://img.shields.io/npm/dm/legacywhisperer)](https://www.npmjs.com/package/legacywhisperer)
+[![license](https://img.shields.io/npm/l/legacywhisperer)](LICENSE)
+
 AI-powered technical debt auditor. Paste legacy code, get instant maintainability scores, security risks, and AI-generated refactoring suggestions — with real-time streaming.
 
 **Live:** https://legacy-code-whisperer.vercel.app
